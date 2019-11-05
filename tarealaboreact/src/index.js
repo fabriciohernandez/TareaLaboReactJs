@@ -9,18 +9,49 @@ import './index.css';
 class RegisterForm extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {value: ''};
+    this.state = {carnet: '',
+                  schedule:'',
+                  late:false};
 
-    this.handleCarnetChange = this.handleCarnetChange.bind(this);
+
+
+    this.handleInputChange = this.handleInputChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  handleCarnetChange(event) {
-    this.setState({value: event.target.value});
+  handleInputChange(event) {
+    const target = event.target;
+    const value = target.type === 'checkbox' ? target.checked : target.value;
+    const name = target.name;
+
+    this.setState({
+      [name]: value
+    });
   }
 
   handleSubmit(event) {
-    alert('A name was submitted: ' + this.state.value);
+    let table_body = document.querySelector('#table_body');
+    let new_row = document.createElement('tr');
+    new_row.classList.add("table-active");
+
+    let datetime = new Date();
+
+    let islate="";
+    if (this.state.late==false) {
+      islate="NO"
+    }else {
+      islate="SI"
+    }
+
+    new_row.innerHTML = `
+        <td>${this.state.carnet}</td>
+        <td>${this.state.schedule}</td>
+        <td>${datetime.toLocaleDateString()}</td>
+        <td>${islate}</td>
+        <td><input class="btn btn-danger" type="button" value="Eliminar" onclick="removeStudent(this)"></td>
+    `
+
+    table_body.appendChild(new_row);
     event.preventDefault();
   }
 
@@ -37,10 +68,10 @@ class RegisterForm extends React.Component {
               <label className="col-sm-2 col-form-label">
                 Ingrese el carnet:
               </label>
-              <input className="form-control" type="text" placeholder="Carnet" name="carnet" value={this.state.carnet} onChange={this.handleCarnetChange} />
+              <input className="form-control" type="text" placeholder="Carnet" name="carnet" value={this.state.carnet} onChange={this.handleInputChange} />
               <br/>
               <label for="schedule">Seleccione el horario:</label>
-              <select name="schedule" class="form-control" id="schedule_field">
+              <select name="schedule" class="form-control" value={this.state.schedule} onChange={this.handleInputChange}>
                   <option>Lunes de 9:00 a 11.00</option>
                   <option>Martes de 13:30 a 15:30</option>
                   <option>Miércoles de 9:00 a 11.00</option>
@@ -51,7 +82,7 @@ class RegisterForm extends React.Component {
               <FormControl component="fieldset">
                 <FormGroup aria-label="position" row>
                   <FormControlLabel
-                    value="end"
+
                     control={<Switch color="primary" />}
                     label="¿Llegó tarde?"
                     labelPlacement="end"
