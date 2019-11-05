@@ -1,5 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import Switch from '@material-ui/core/Switch';
+import FormGroup from '@material-ui/core/FormGroup';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import FormControl from '@material-ui/core/FormControl';
 import './index.css';
 
 class RegisterForm extends React.Component {
@@ -18,10 +22,7 @@ class RegisterForm extends React.Component {
                 Ingrese el carnet:
               </label>
               <input className="form-control" type="text" name="name" />
-            </form>
-          </div>
-          <div className="form-group">
-            <form>
+              <br/>
               <label for="schedule">Seleccione el horario:</label>
               <select name="schedule" class="form-control" id="schedule_field">
                   <option>Lunes de 9:00 a 11.00</option>
@@ -31,15 +32,19 @@ class RegisterForm extends React.Component {
                   <option>Viernes de 9:00 a 11.00</option>
                   <option>Viernes de 15:30 a 17:30</option>
               </select>
+              <FormControl component="fieldset">
+                <FormGroup aria-label="position" row>
+                  <FormControlLabel
+                    value="end"
+                    control={<Switch color="primary" />}
+                    label="¿Llegó tarde?"
+                    labelPlacement="end"
+                  />
+                </FormGroup>
+              </FormControl>
+              <br/>
+              <button type="submit" className="btn btn-danger" id="submit_btn">Ingresar</button>
             </form>
-          </div>
-
-          <div class="form-group">
-
-          </div>
-
-          <div className="form-group">
-              <button type="button" className="btn btn-danger" id="submit_btn">Ingresar</button>
           </div>
 
         </div>
