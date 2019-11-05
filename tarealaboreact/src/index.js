@@ -19,6 +19,7 @@ class RegisterForm extends React.Component {
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
+
   handleInputChange(event) {
     const target = event.target;
     const value = target.type === 'checkbox' ? target.checked : target.value;
@@ -29,31 +30,55 @@ class RegisterForm extends React.Component {
     });
   }
 
+  removeStudent(t){
+    alert("entre");
+    var td = t.parentNode;
+    var tr = td.parentNode;
+
+    var table = tr.parentNode;
+    table.removeChild(tr);
+  }
+
   handleSubmit(event) {
-    let table_body = document.querySelector('#table_body');
-    let new_row = document.createElement('tr');
-    new_row.classList.add("table-active");
+    let carnet_regex = new RegExp("^[0-9]{8}$")
+    if (this.state.carnet==="") {
+      alert("Por favor ingrese un carnet antes de continuar")
+    }
+    else {
+      if(carnet_regex.test(this.state.carnet)){
+        let table_body = document.querySelector('#table_body');
+        let new_row = document.createElement('tr');
+        new_row.classList.add("table-active");
 
-    let datetime = new Date();
+        let datetime = new Date();
 
-    let islate="";
-    if (this.state.late==false) {
-      islate="NO"
-    }else {
-      islate="SI"
+        let islate="";
+        if (this.state.late===false) {
+          islate="NO"
+        }else {
+          islate="SI"
+        }
+
+        new_row.innerHTML = `
+            <td>${this.state.carnet}</td>
+            <td>${this.state.schedule}</td>
+            <td>${datetime.toLocaleDateString()}</td>
+            <td>${islate}</td>
+            <td><input class="btn btn-danger" type="button" value="Eliminar" onclick="removeStudent(this)"></td>
+        `
+
+        table_body.appendChild(new_row);
+        event.preventDefault();
+      }else{
+          alert("Formato de carnet inválido");
+      }
     }
 
-    new_row.innerHTML = `
-        <td>${this.state.carnet}</td>
-        <td>${this.state.schedule}</td>
-        <td>${datetime.toLocaleDateString()}</td>
-        <td>${islate}</td>
-        <td><input class="btn btn-danger" type="button" value="Eliminar" onclick="removeStudent(this)"></td>
-    `
 
-    table_body.appendChild(new_row);
-    event.preventDefault();
+
   }
+
+
 
   render() {
     return (
@@ -70,8 +95,8 @@ class RegisterForm extends React.Component {
               </label>
               <input className="form-control" type="text" placeholder="Carnet" name="carnet" value={this.state.carnet} onChange={this.handleInputChange} />
               <br/>
-              <label for="schedule">Seleccione el horario:</label>
-              <select name="schedule" class="form-control" value={this.state.schedule} onChange={this.handleInputChange}>
+              <label htmlFor="schedule">Seleccione el horario:</label>
+              <select name="schedule" className="form-control" value={this.state.schedule} onChange={this.handleInputChange}>
                   <option>Lunes de 9:00 a 11.00</option>
                   <option>Martes de 13:30 a 15:30</option>
                   <option>Miércoles de 9:00 a 11.00</option>
@@ -82,7 +107,8 @@ class RegisterForm extends React.Component {
               <FormControl component="fieldset">
                 <FormGroup aria-label="position" row>
                   <FormControlLabel
-
+                    checked={this.state.late}
+                    onChange={this.handleInputChange}
                     control={<Switch color="primary" />}
                     label="¿Llegó tarde?"
                     labelPlacement="end"
