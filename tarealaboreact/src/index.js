@@ -7,6 +7,22 @@ import FormControl from '@material-ui/core/FormControl';
 import './index.css';
 
 class RegisterForm extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {value: ''};
+
+    this.handleCarnetChange = this.handleCarnetChange.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
+  }
+
+  handleCarnetChange(event) {
+    this.setState({value: event.target.value});
+  }
+
+  handleSubmit(event) {
+    alert('A name was submitted: ' + this.state.value);
+    event.preventDefault();
+  }
 
   render() {
     return (
@@ -17,11 +33,11 @@ class RegisterForm extends React.Component {
           <h1>Registro de laboratorio</h1>
 
           <div className="form-group">
-            <form>
+            <form onSubmit={this.handleSubmit}>
               <label className="col-sm-2 col-form-label">
                 Ingrese el carnet:
               </label>
-              <input className="form-control" type="text" name="name" />
+              <input className="form-control" type="text" placeholder="Carnet" name="carnet" value={this.state.carnet} onChange={this.handleCarnetChange} />
               <br/>
               <label for="schedule">Seleccione el horario:</label>
               <select name="schedule" class="form-control" id="schedule_field">
